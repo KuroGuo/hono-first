@@ -2,15 +2,10 @@
   "compilerOptions": {
     "target": "es2023",
     "module": "nodenext",
-    "outDir": "./dist/server",
-    "rootDir": "./src",
+    "rootDir": "src",
+    "outDir": "dist/server",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    }
+    "skipLibCheck": true
   }
 }

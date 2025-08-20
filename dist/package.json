@@ -1,0 +1,23 @@
+{
+  "name": "hono-first",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cross-env NODE_ENV=production FOREVER_ROOT=.forever forever start index.js"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.0",
+    "cross-env": "^10.0.0",
+    "dotenv": "^17.2.1",
+    "forever": "^4.0.3",
+    "hono": "^4.9.2",
+    "uuid": "^11.1.0",
+    "viem": "^2.34.0",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "pnpm": {
+    "neverBuiltDependencies": []
+  },
+  "type": "module"
+}

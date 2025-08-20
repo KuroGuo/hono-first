@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "cross-env NODE_ENV=development tsx watch src/app.ts",
-		"build": "tsc",
+		"build": "tsc && node scripts/sync-deps.js",
 		"postbuild": "cross-zip dist ulti_ido_node.zip",
 		"start": "node dist/server/app.js",
 		"db:push": "drizzle-kit push",
@@ -15,6 +15,8 @@
 	"dependencies": {
 		"@hono/node-server": "^1.19.0",
 		"cross-env": "^10.0.0",
+		"dotenv": "^17.2.1",
+		"forever": "^4.0.3",
 		"hono": "^4.9.2",
 		"uuid": "^11.1.0",
 		"viem": "^2.34.0",

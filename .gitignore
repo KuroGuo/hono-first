@@ -9,11 +9,9 @@ yarn-error.log
 .env.*.local
 
 # Build output
-dist/*
-!dist/package.json
-!dist/.env.example
-!dist/drizzle/
-!dist/index.js
+dist/public/uploads/
+dist/.forever
+dist/server/
 build/
 
 # TypeScript
@@ -39,8 +37,6 @@ package-lock.json
 yarn.lock
 
 *.zip
-
-public/uploads/
 
 logs/
 

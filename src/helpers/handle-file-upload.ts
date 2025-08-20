@@ -2,9 +2,9 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import type { Context } from 'hono'
 import { v4 as uuidv4 } from 'uuid'
-import logger from '@/logger.js'
 import { HTTPException } from 'hono/http-exception'
-import { mimeTypeToExtension } from '@/utils.js'
+import { mimeTypeToExtension } from '../utils.js'
+import logger from '../logger.js'
 
 const uploadConfig = {
   maxFileSize: 5 * 1024 * 1024,

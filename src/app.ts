@@ -1,11 +1,14 @@
 import { Hono } from 'hono'
 import type { HttpBindings } from '@hono/node-server'
 import { serve } from '@hono/node-server'
-import logger from '@/logger.js'
-import { serveStatic } from '@hono/node-server/serve-static'
-import { handleFileUpload } from './helpers/handle-file-upload.js'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
+import { serveStatic } from '@hono/node-server/serve-static'
+import { isDev } from './config.js'
+import logger from './logger.js'
+import routes from './routes/index.js'
+
+(BigInt.prototype as any).toJSON = function () { return this.toString() }
 
 declare module 'hono' {
   interface ContextVariableMap {
@@ -16,6 +19,7 @@ declare module 'hono' {
 }
 
 const app = new Hono<{ Bindings: HttpBindings }>()
+const PORT = +(process.env.PORT || 3000)
 
 app.use(async (c, next) => {
   const startTime = Date.now()
@@ -35,7 +39,9 @@ app.use(async (c, next) => {
   })
 })
 
-app.use('/uploads/*', serveStatic({ root: 'public' }))
+const publicDir = isDev ? 'dist/public' : 'public'
+
+app.use('/uploads/*', serveStatic({ root: publicDir }))
 // root: path.join(dirname(fileURLToPath(import.meta.url)), '../public')
 
 app.use(async (c, next) => {
@@ -48,34 +54,9 @@ app.use(async (c, next) => {
   await next()
 })
 
-// app.get('/', c => c.text('Hello Hono!'))
+app.route('/api', routes)
 
-app.get('/user/:name', c => {
-  const name = c.req.param('name')
-
-  if (name !== 'kuro') {
-    return c.json({ error: 'name 必须为 kuro' }, 400)
-  }
-
-  return c.text(`Hello ${name}!`)
-})
-
-app.post('/upload', async c => {
-  const result = await handleFileUpload(c, 'file')
-
-  return c.json({
-    message: '文件上传成功',
-    fileInfo: {
-      originalName: result.originalName,
-      savedName: result.savedName,
-      size: result.size,
-      type: result.type,
-      path: result.path
-    }
-  })
-})
-
-app.use(serveStatic({ root: 'public' }))
+app.use(serveStatic({ root: publicDir }))
 
 app.onError(async (err, c) => {
   const json: any = c.get('json')
@@ -99,6 +80,6 @@ app.onError(async (err, c) => {
 
 export default app
 
-serve({ fetch: app.fetch, port: 3000 }, info => {
+serve({ fetch: app.fetch, port: PORT }, info => {
   console.log(`Server running on http://localhost:${info.port}`)
 })

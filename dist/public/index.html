@@ -11,7 +11,7 @@
   <h1 id="title"></h1>
   <p>这是我的第一个HTML页面。</p>
 
-  <form action="/upload" method="post" enctype="multipart/form-data">
+  <form action="/api/upload" method="post" enctype="multipart/form-data">
     <input type="file" name="file">
     <button>提交</button>
   </form>
@@ -19,10 +19,7 @@
   <script>
     void (async () => {
       const title = document.querySelector('#title')
-      const res = await fetch('/user/kuro')
-      await fetch('/user/kuro')
-      await fetch('/user/kuro')
-      await fetch('/user/kuro')
+      const res = await fetch('/api/user/kuro')
       title.textContent = await res.text()
     })()
     // function onSubmit(e) {
