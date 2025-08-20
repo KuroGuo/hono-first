@@ -12,7 +12,7 @@ export default function bodyParser() {
     if (c.req.header('Content-Type')?.includes('multipart/form-data')) {
       c.set('formData', await c.req.formData())
     } else {
-      c.set('json', await c.req.json())
+      c.set('json', await c.req.json().catch(() => { }))
     }
     await next()
   })

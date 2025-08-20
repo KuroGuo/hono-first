@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { HTTPException } from 'hono/http-exception'
 import { mimeTypeToExtension } from '../utils.js'
 import logger from '../logger.js'
+import { isDev } from '../config.js'
 
 const uploadConfig = {
   maxFileSize: 5 * 1024 * 1024,
@@ -16,7 +17,7 @@ const uploadConfig = {
     'application/pdf',
     'text/plain'
   ],
-  uploadDir: 'public/uploads'
+  uploadDir: `${isDev ? 'dist/' : ''}public/uploads`
 }
 
 export async function handleFileUpload(c: Context, fieldName: string) {
@@ -42,7 +43,7 @@ export async function handleFileUpload(c: Context, fieldName: string) {
   }
 
   try {
-    const ext = mimeTypeToExtension(file.type) || '.bin'
+    const ext = `.${mimeTypeToExtension(file.type) || 'bin'}`
     const fileName = `${uuidv4()}${ext}`
     const filePath = path.join(uploadConfig.uploadDir, fileName)
 

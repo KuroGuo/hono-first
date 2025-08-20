@@ -33,7 +33,7 @@ app.use(async (c, next) => {
 
 app.route('/api', routes)
 
-app.use(serveStatic({ root: isDev ? 'dist/public' : 'public' }))
+app.use(serveStatic({ root: `${isDev ? 'dist/' : ''}public` }))
 
 app.onError(async (err, c) => {
   const json: any = c.get('json')
