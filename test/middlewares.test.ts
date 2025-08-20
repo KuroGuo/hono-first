@@ -17,7 +17,7 @@ describe('Middlewares', () => {
       const app = new Hono()
       app.use(bodyParser())
       app.post('/', c => {
-        const json: any = c.get('json')
+        const json: any = c.var.json
         return c.json(json)
       })
 
@@ -38,7 +38,7 @@ describe('Middlewares', () => {
       const app = new Hono()
       app.use(bodyParser())
       app.post('/', async c => {
-        const formData = c.get('formData')
+        const formData = c.var.formData
         const value = formData?.get('test')
         return c.json({ value })
       })
@@ -76,7 +76,7 @@ describe('Middlewares', () => {
       const app = new Hono()
       app.use(authenticateToken())
       app.get('/', c => {
-        const user = c.get('user')
+        const user = c.var.user
         return c.json({ user })
       })
 

@@ -17,7 +17,7 @@ app.use(async (c, next) => {
   await next()
   const durationMs = Date.now() - startTime
 
-  const json: any = c.get('json')
+  const json: any = c.var.json
 
   logger[c.res.status >= 400 || durationMs > 600 ? 'warn' : 'info']({
     message: `${c.req.method} ${c.req.path}`,
@@ -26,7 +26,7 @@ app.use(async (c, next) => {
     durationMs,
     clientIp: c.req.header('x-forwarded-for') || c.env?.incoming.socket.remoteAddress,
     userAgent: c.req.header('user-agent'),
-    userId: c.get('user')?.account
+    userId: c.var.user?.account
   })
 })
 
@@ -43,7 +43,7 @@ if (process.env.NODE_ENV === 'test') {
 app.use(serveStatic({ root: `${isDev ? 'dist/' : ''}public` }))
 
 app.onError(async (err, c) => {
-  const json: any = c.get('json')
+  const json: any = c.var.json
 
   let status: ContentfulStatusCode = 500
 
@@ -56,7 +56,7 @@ app.onError(async (err, c) => {
     error: err.stack,
     clientIp: c.req.header('x-forwarded-for') || c.env?.incoming.socket.remoteAddress,
     userAgent: c.req.header('user-agent'),
-    userId: c.get('user')?.account
+    userId: c.var.user?.account
   })
 
   return c.json({ error: err.message }, status)

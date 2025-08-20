@@ -23,7 +23,7 @@ const uploadConfig = {
 export async function handleFileUpload(c: Context, fieldName: string) {
   await ensureUploadsDir()
 
-  const formData = c.get('formData')
+  const formData = c.var.formData
   const file = formData?.get(fieldName) as File | null | undefined
 
   if (!file || !file.size) {
