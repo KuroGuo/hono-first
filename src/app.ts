@@ -10,14 +10,6 @@ import routes from './routes/index.js'
 
 (BigInt.prototype as any).toJSON = function () { return this.toString() }
 
-declare module 'hono' {
-  interface ContextVariableMap {
-    user?: { account: string }
-    json?: unknown
-    formData?: FormData
-  }
-}
-
 const app = new Hono<{ Bindings: HttpBindings }>()
 const PORT = +(process.env.PORT || 3000)
 
@@ -39,24 +31,9 @@ app.use(async (c, next) => {
   })
 })
 
-const publicDir = isDev ? 'dist/public' : 'public'
-
-app.use('/uploads/*', serveStatic({ root: publicDir }))
-// root: path.join(dirname(fileURLToPath(import.meta.url)), '../public')
-
-app.use(async (c, next) => {
-  console.log('contenttype', c.req.header('Content-Type'))
-  if (c.req.header('Content-Type')?.includes('multipart/form-data')) {
-    c.set('formData', await c.req.formData())
-  } else {
-    c.set('json', await c.req.json().catch(() => { }))
-  }
-  await next()
-})
-
 app.route('/api', routes)
 
-app.use(serveStatic({ root: publicDir }))
+app.use(serveStatic({ root: isDev ? 'dist/public' : 'public' }))
 
 app.onError(async (err, c) => {
   const json: any = c.get('json')

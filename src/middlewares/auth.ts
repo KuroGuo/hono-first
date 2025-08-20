@@ -1,6 +1,12 @@
 import { createMiddleware } from 'hono/factory'
 import { recoverMessageAddress } from 'viem'
 
+declare module 'hono' {
+  interface ContextVariableMap {
+    user?: { account: string }
+  }
+}
+
 export function authenticateToken(isOptional?: boolean) {
   return createMiddleware(async (c, next) => {
     const token = c.req.header('token')
