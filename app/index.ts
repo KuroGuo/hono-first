@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
-import type { HttpBindings } from '@hono/node-server'
 import { HTTPException } from 'hono/http-exception'
+import { cors } from 'hono/cors'
+import type { HttpBindings } from '@hono/node-server'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { isDev } from './config.js'
@@ -28,6 +29,8 @@ app.use(async (c, next) => {
     userId: c.get('user')?.account
   })
 })
+
+app.use(cors())
 
 app.route('/api', routes)
 
