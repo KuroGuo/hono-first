@@ -9,4 +9,4 @@ export const isTestnet = process.env.TESTNET === 'true'
 
 export const isFirstInstance = !process.env.NODE_APP_INSTANCE || process.env.NODE_APP_INSTANCE === '0'
 
-export const isDev = process.env.IS_DEV === 'true'
+export const isDev = process.env.NODE_ENV === 'development'

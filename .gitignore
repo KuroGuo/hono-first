@@ -11,7 +11,7 @@ yarn-error.log
 # Build output
 dist/public/uploads/
 dist/.forever
-dist/server/
+dist/app/
 build/
 
 # TypeScript
@@ -43,3 +43,5 @@ logs/
 temp.txt
 
 pnpm-*.yaml
+
+coverage/

@@ -3,13 +3,15 @@
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "cross-env NODE_ENV=development tsx watch src/app.ts",
+		"dev": "cross-env NODE_ENV=development tsx watch app/index.ts",
 		"build": "tsc && node scripts/sync-deps.js",
 		"postbuild": "cross-zip dist ulti_ido_node.zip",
-		"start": "node dist/server/app.js",
+		"start": "node dist/app/index.js",
 		"db:push": "drizzle-kit push",
 		"db:generate": "drizzle-kit generate",
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage",
 		"lint": "eslint"
 	},
 	"dependencies": {
@@ -25,13 +27,15 @@
 	},
 	"devDependencies": {
 		"@types/node": "^24.3.0",
+		"@vitest/coverage-v8": "^1.4.0",
 		"cross-zip-cli": "^1.0.0",
 		"eslint": "^9.33.0",
 		"eslint-plugin-drizzle": "^0.2.3",
 		"globals": "^16.3.0",
 		"tsx": "^4.20.4",
 		"typescript": "^5.9.2",
-		"typescript-eslint": "^8.40.0"
+		"typescript-eslint": "^8.40.0",
+		"vitest": "^1.4.0"
 	},
 	"pnpm": {
 		"neverBuiltDependencies": []
