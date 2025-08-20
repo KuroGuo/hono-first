@@ -1,0 +1,38 @@
+{
+	"name": "hono-first",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "cross-env NODE_ENV=development tsx watch src/app.ts",
+		"build": "tsc",
+		"postbuild": "cross-zip dist ulti_ido_node.zip",
+		"start": "node dist/server/app.js",
+		"db:push": "drizzle-kit push",
+		"db:generate": "drizzle-kit generate",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"lint": "eslint"
+	},
+	"dependencies": {
+		"@hono/node-server": "^1.19.0",
+		"cross-env": "^10.0.0",
+		"hono": "^4.9.2",
+		"uuid": "^11.1.0",
+		"viem": "^2.34.0",
+		"winston": "^3.17.0",
+		"winston-daily-rotate-file": "^5.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^24.3.0",
+		"cross-zip-cli": "^1.0.0",
+		"eslint": "^9.33.0",
+		"eslint-plugin-drizzle": "^0.2.3",
+		"globals": "^16.3.0",
+		"tsx": "^4.20.4",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.40.0"
+	},
+	"pnpm": {
+		"neverBuiltDependencies": []
+	},
+	"type": "module"
+}

@@ -1,0 +1,49 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/*
+!dist/package.json
+!dist/.env.example
+!dist/drizzle/
+!dist/index.js
+build/
+
+# TypeScript
+*.tsbuildinfo
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Package files
+package-lock.json
+yarn.lock
+
+*.zip
+
+public/uploads/
+
+logs/
+
+temp.txt
+
+pnpm-*.yaml
