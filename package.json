@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "cross-env NODE_ENV=development tsx watch app/index.ts",
-		"build": "tsc && node scripts/sync-deps.js",
+		"build": "tsc && tsx scripts/sync-deps.ts",
 		"postbuild": "cross-zip dist ulti_ido_node.zip",
 		"start": "node dist/app/index.js",
 		"db:push": "drizzle-kit push",
