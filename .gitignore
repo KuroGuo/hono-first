@@ -12,6 +12,7 @@ yarn-error.log
 dist/public/uploads/
 dist/.forever
 dist/app/
+dist/index.js
 build/
 
 # TypeScript
