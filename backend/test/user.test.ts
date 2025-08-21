@@ -9,7 +9,7 @@ describe('User Routes', () => {
   it('should return hello message for valid name', async () => {
     const res = await app.request('/kuro')
     expect(res.status).toBe(200)
-    expect(await res.text()).toBe('Hello kuro!')
+    expect(await res.json()).toStrictEqual({ name: 'kuro' })
   })
 
   it('should return error for invalid name', async () => {

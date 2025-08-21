@@ -8,5 +8,5 @@ export default new Hono()
       return c.json({ error: 'name 必须为 kuro' }, 400)
     }
 
-    return c.text(`Hello ${name}!`)
+    return c.json({ name }, 200)
   })

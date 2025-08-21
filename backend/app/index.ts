@@ -8,7 +8,8 @@ import { isDev } from './config.js'
 import logger from './logger.js'
 import routes from './routes/index.js'
 
-(BigInt.prototype as any).toJSON = function () { return this.toString() }
+declare global { interface BigInt { toJSON?: () => string } }
+BigInt.prototype.toJSON = function () { return this.toString() }
 
 const app = new Hono<{ Bindings: HttpBindings }>()
   .use(async (c, next) => {
@@ -16,7 +17,7 @@ const app = new Hono<{ Bindings: HttpBindings }>()
     await next()
     const durationMs = Date.now() - startTime
 
-    const json: any = c.var.json
+    const json = c.var.json as { password?: string; Password?: string }
 
     logger[c.res.status >= 400 || durationMs > 600 ? 'warn' : 'info']({
       message: `${c.req.method} ${c.req.path}`,
@@ -32,7 +33,7 @@ const app = new Hono<{ Bindings: HttpBindings }>()
   .route('/api', routes)
   .use(serveStatic({ root: `${isDev ? 'dist/' : ''}public` }))
   .onError(async (err, c) => {
-    const json: any = c.var.json
+    const json = c.var.json as { password?: string; Password?: string }
 
     let status: ContentfulStatusCode = 500
 
@@ -58,3 +59,5 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 export default app
+
+export type AppType = typeof app

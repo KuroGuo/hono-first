@@ -3,15 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "cross-env NEXT_PUBLIC_TESTNET=true next dev --turbopack",
+    "build": "pnpm run build:testnet",
+    "build:testnet": "cross-env NEXT_PUBLIC_TESTNET=true next build --turbopack",
+    "postbuild:testnet": "cross-zip out hono-first-frontend-testnet.zip",
+    "build:mainnet": "cross-env NEXT_PUBLIC_TESTNET=false next build --turbopack",
+    "postbuild:mainnet": "cross-zip out hono-first-frontend.zip",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.85.5",
+    "hono": "^4.9.2",
     "next": "^15.5.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-toastify": "^11.0.5",
+    "valtio": "^2.1.7",
+    "wagmi": "^2.16.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -19,6 +28,8 @@
     "@types/node": "^22.17.2",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
+    "cross-env": "^10.0.0",
+    "cross-zip-cli": "^1.0.0",
     "eslint": "^9.33.0",
     "eslint-config-next": "^15.5.0",
     "eslint-plugin-react-hooks": "^5.2.0",

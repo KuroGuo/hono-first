@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
+import { Slide, ToastContainer } from 'react-toastify'
 import './globals.css'
+import { Providers } from './providers'
+import { Transition } from './transition'
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -9,7 +12,19 @@ export const metadata: Metadata = {
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return <html lang='zh-CN'>
     <body>
-      {children}
+      <Providers>
+        <Transition>{children}</Transition>
+      </Providers>
+      <ToastContainer
+        position='top-right'
+        transition={Slide}
+        theme='colored'
+        draggable={false}
+        pauseOnFocusLoss={false}
+        pauseOnHover={false}
+        autoClose={2000}
+        hideProgressBar={true}
+      />
     </body>
   </html>
 }

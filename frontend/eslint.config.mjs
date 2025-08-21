@@ -19,7 +19,7 @@ const eslintConfig = [
   }).extends('next/core-web-vitals', 'next/typescript'),
   {
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
+      // '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/consistent-type-imports': 'warn',
       'no-restricted-syntax': [
         'warn',

@@ -7,6 +7,8 @@ import { mimeTypeToExtension } from '../utils.js'
 import logger from '../logger.js'
 import { isDev } from '../config.js'
 
+const dirName = 'uploads'
+
 const uploadConfig = {
   maxFileSize: 5 * 1024 * 1024,
   allowedMimeTypes: [
@@ -17,7 +19,7 @@ const uploadConfig = {
     'application/pdf',
     'text/plain'
   ],
-  uploadDir: `${isDev ? 'dist/' : ''}public/uploads`
+  uploadDir: `${isDev ? 'dist/' : ''}public/${dirName}`
 }
 
 export async function handleFileUpload(c: Context, fieldName: string) {
@@ -54,7 +56,7 @@ export async function handleFileUpload(c: Context, fieldName: string) {
       savedName: fileName,
       size: file.size,
       type: file.type,
-      path: filePath
+      path: `/${dirName}/${fileName}`
     }
   } catch (err: unknown) {
     logger.error('文件保存失败', err)

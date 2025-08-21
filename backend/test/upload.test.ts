@@ -40,14 +40,11 @@ describe('Upload Routes', () => {
     expect(res.status).toBe(200)
     const json = await res.json()
     expect(json).toEqual({
-      message: '文件上传成功',
-      fileInfo: {
-        originalName: 'test.jpg',
-        savedName: 'abc123.jpg',
-        size: 1024,
-        type: 'image/jpeg',
-        path: '/uploads/abc123.jpg'
-      }
+      originalName: 'test.jpg',
+      savedName: 'abc123.jpg',
+      size: 1024,
+      type: 'image/jpeg',
+      path: '/uploads/abc123.jpg'
     })
 
     // 验证 handleFileUpload 被正确调用

@@ -17,7 +17,7 @@ describe('Middlewares', () => {
       const app = new Hono()
       app.use(bodyParser())
       app.post('/', c => {
-        const json: any = c.var.json
+        const json = c.var.json as object
         return c.json(json)
       })
 
