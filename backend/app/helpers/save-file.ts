@@ -1,6 +1,5 @@
 import path from 'path'
 import { promises as fs } from 'fs'
-import type { Context } from 'hono'
 import { v4 as uuidv4 } from 'uuid'
 import { HTTPException } from 'hono/http-exception'
 import { mimeTypeToExtension } from '../utils.js'
@@ -22,11 +21,8 @@ const uploadConfig = {
   uploadDir: `${isDev ? 'dist/' : ''}public/${dirName}`
 }
 
-export async function handleFileUpload(c: Context, fieldName: string) {
+export default async function saveFile(file: File | null | undefined) {
   await ensureUploadsDir()
-
-  const formData = c.var.formData
-  const file = formData?.get(fieldName) as File | null | undefined
 
   if (!file || !file.size) {
     throw new HTTPException(400, { message: '未收到文件' })
