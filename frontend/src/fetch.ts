@@ -28,7 +28,7 @@ export interface MyFetchOptions {
   noErrorAlert?: boolean
 }
 
-export async function backend<T>(url: string | URL, options?: RequestInit, myOptions?: MyFetchOptions) {
+export async function backend<T>(url: URL | RequestInfo, options?: RequestInit, myOptions?: MyFetchOptions) {
   let signData: SignData | undefined
   if (!myOptions?.noToken && !(options?.headers as { sign: string } | undefined)?.sign) {
     signData = getSignData()
@@ -38,8 +38,8 @@ export async function backend<T>(url: string | URL, options?: RequestInit, myOpt
 
   if (url instanceof URL) url = urlToString(url)
 
-  const rawURL = url
-  url = toFullUrl(url)
+  const rawURL = url.toString()
+  url = toFullUrl(rawURL)
 
   const errToString = (err: Error | string) => {
     return (err as Error)?.message || err as string

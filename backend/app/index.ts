@@ -39,7 +39,7 @@ const app = new Hono<{ Bindings: HttpBindings }>()
 
     if (err instanceof HTTPException) status = err.status
 
-    logger.error({
+    logger[c.res.status >= 500 ? 'error' : 'warn']({
       message: `${c.req.method} ${c.req.path}`,
       body: json?.password || json?.Password ? undefined : json,
       statusCode: status,

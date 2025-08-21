@@ -4,7 +4,7 @@ import type { FormEventHandler } from 'react'
 import { useCallback, useState } from 'react'
 import { useFetch } from '@/hooks/useFetch'
 import { api, backend, toFullUrl, userReq } from '@/fetch'
-import type { InferResponseType } from 'hono'
+import type { InferRequestType, InferResponseType } from 'hono'
 import Image from 'next/image'
 
 type UploadRes = InferResponseType<typeof api.upload.$post, 200>
@@ -19,6 +19,10 @@ export default function Home() {
   const onSubmit = useCallback<FormEventHandler<HTMLFormElement>>(async e => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
+    const file = formData.get('file')
+    if (!(file instanceof File)) return console.warn('!(file instanceof File)')
+    file satisfies InferRequestType<typeof api.upload.$post>['form']['file']
+    if (!file.size) return console.warn('!file.size')
     const res = await backend<UploadRes>(api.upload.$url(), {
       method: 'POST',
       body: formData
