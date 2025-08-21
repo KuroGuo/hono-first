@@ -1,11 +1,11 @@
 {
-	"name": "hono-first",
+	"name": "hono-first-backend",
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
 		"dev": "cross-env NODE_ENV=development tsx watch index.ts",
 		"build": "tsc && tsx scripts/sync-deps.ts",
-		"postbuild": "cross-zip dist ulti_ido_node.zip",
+		"postbuild": "cross-zip dist hono-first-backend.zip",
 		"start": "node dist/app/index.js",
 		"db:push": "drizzle-kit push",
 		"db:generate": "drizzle-kit generate",
