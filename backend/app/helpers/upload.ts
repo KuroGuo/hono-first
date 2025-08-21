@@ -21,7 +21,7 @@ const uploadConfig = {
   uploadDir: `${isDev ? 'dist/' : ''}public/${dirName}`
 }
 
-export default async function saveFile(file: File | null | undefined) {
+export async function saveFile(file: File | null | undefined) {
   await ensureUploadsDir()
 
   if (!file || !file.size) {
