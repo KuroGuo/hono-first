@@ -1,6 +1,6 @@
 import path from 'path'
 import { promises as fs } from 'fs'
-import { v4 as uuidv4 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 import { HTTPException } from 'hono/http-exception'
 import { mimeTypeToExtension } from '../utils.js'
 import logger from '../logger.js'
@@ -42,7 +42,7 @@ export async function saveFile(file: File | null | undefined) {
 
   try {
     const ext = `.${mimeTypeToExtension(file.type) || 'bin'}`
-    const fileName = `${uuidv4()}${ext}`
+    const fileName = `${uuidv7()}${ext}`
     const filePath = path.join(uploadConfig.uploadDir, fileName)
 
     await fs.writeFile(filePath, Buffer.from(await file.arrayBuffer()))
