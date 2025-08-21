@@ -53,9 +53,9 @@ export class HTTPError extends HTTPException {
     res?: Response
     message?: string
     cause?: unknown
-    text?: TextObj
+    text?: TextObj | TranslatableText
   }) {
-    const textObj = options?.text
+    const textObj = typeof options?.text === 'string' ? text(options.text) : options?.text
     const messageStr = textObj ? createTranslateFunction('en')(textObj.text, ...textObj.values) : options?.message
     super(status, { ...options, message: messageStr })
     this.name = 'HTTPError'

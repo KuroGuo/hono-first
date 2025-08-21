@@ -1,13 +1,13 @@
 import { Hono } from 'hono'
 import { saveFile } from '../helpers/upload.js'
 import { validator } from 'hono/validator'
-import { HTTPException } from 'hono/http-exception'
+import { HTTPError } from '../translate.js'
 
 export default new Hono()
   .post('/', validator('form', form => {
     const file = form['file']
     if (!(file instanceof File)) {
-      throw new HTTPException(400, { message: 'file 字段必须是文件' })
+      throw new HTTPError(400, { text: 'file 字段必须是文件' })
     }
     return { file }
   }), async c => {

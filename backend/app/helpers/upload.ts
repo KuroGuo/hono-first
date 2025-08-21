@@ -26,7 +26,7 @@ export async function saveFile(file: File | null | undefined) {
   await ensureUploadsDir()
 
   if (!file || !file.size) {
-    throw new HTTPError(400, { text: text('未收到文件') })
+    throw new HTTPError(400, { text: '未收到文件' })
   }
 
   if (file.size > uploadConfig.maxFileSize) {
@@ -58,7 +58,7 @@ export async function saveFile(file: File | null | undefined) {
   } catch (err: unknown) {
     logger.error('文件保存失败', err)
     throw new HTTPError(500, {
-      text: text(((err as Error)?.message || (err as string)?.toString()) as TranslatableText)
+      text: ((err as Error)?.message || (err as string)?.toString()) as TranslatableText
     })
   }
 }
