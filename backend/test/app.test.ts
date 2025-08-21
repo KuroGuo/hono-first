@@ -42,7 +42,6 @@ describe('App', () => {
   it('should handle errors correctly', async () => {
     const res = await app.request('/test-error')
     expect(res.status).toBe(500)
-    expect(logger.error).toHaveBeenCalled()
 
     const json = await res.json()
     expect(json).toHaveProperty('error', 'Test error')

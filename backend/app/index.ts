@@ -7,7 +7,8 @@ import { serveStatic } from '@hono/node-server/serve-static'
 import { isDev } from './config.js'
 import logger from './logger.js'
 import routes from './routes/index.js'
-import { HTTPError } from './helpers/translate/index.js'
+import type { TranslatableText } from './translate.js'
+import { HTTPError } from './translate.js'
 
 declare global { interface BigInt { toJSON?: () => string } }
 BigInt.prototype.toJSON = function () { return this.toString() }
@@ -52,7 +53,9 @@ const app = new Hono<{ Bindings: HttpBindings }>()
       userId: c.var.user?.account
     })
 
-    return c.json({ error: err.message }, status)
+    return c.json({
+      error: c.var.translate?.(err.message as TranslatableText) || err.message
+    }, status)
   })
 
 if (process.env.NODE_ENV === 'test') {

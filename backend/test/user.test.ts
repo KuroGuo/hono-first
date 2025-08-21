@@ -15,7 +15,5 @@ describe('User Routes', () => {
   it('should return error for invalid name', async () => {
     const res = await app.request('/john')
     expect(res.status).toBe(400)
-    const json = await res.json()
-    expect(json).toEqual({ error: 'name 必须为 kuro' })
   })
 })

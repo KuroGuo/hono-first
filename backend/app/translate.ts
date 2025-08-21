@@ -6,15 +6,19 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 
 export type Lang = keyof typeof commonTranslations
 
-export type Text = { [K in Lang]: keyof typeof commonTranslations[K] }[Lang]
+export type TranslatableText = { [K in Lang]: keyof typeof commonTranslations[K] }[Lang]
 
 export default function translator(c: Context) {
   const lang = accepts(c, {
     header: 'Accept-Language',
-    supports: ['en', 'zh-CN'],
-    default: 'en',
-  })
-  return function translate<T extends Text>(text: T, ...values: (string | number)[]) {
+    supports: ['en', 'zh-CN'] satisfies Lang[],
+    default: 'en' satisfies Lang,
+  }) as Lang
+  return createTranslateFunction(lang)
+}
+
+function createTranslateFunction(lang: Lang) {
+  return function translate<T extends TranslatableText>(text: T, ...values: (string | number)[]) {
     return translateText(commonTranslations, lang, text, ...values)
   }
 }
@@ -32,9 +36,9 @@ function translateText(
   return translated
 }
 
-type TextObj = { text: Text; values: (string | number)[] }
+type TextObj = { text: TranslatableText; values: (string | number)[] }
 
-export function text(t: Text, ...values: (string | number)[]) {
+export function text(t: TranslatableText, ...values: (string | number)[]) {
   return { text: t, values }
 }
 
@@ -47,13 +51,14 @@ export class HTTPError extends HTTPException {
   }
   constructor(status?: ContentfulStatusCode, options?: {
     res?: Response
-    message?: TextObj
+    message?: string
     cause?: unknown
+    text?: TextObj
   }) {
-    const message = options?.message
-    const messageStr = message ? JSON.stringify(message) : undefined
+    const textObj = options?.text
+    const messageStr = textObj ? createTranslateFunction('en')(textObj.text, ...textObj.values) : options?.message
     super(status, { ...options, message: messageStr })
     this.name = 'HTTPError'
-    if (message) this.textObj = message
+    if (textObj) this.textObj = textObj
   }
 }
