@@ -17,14 +17,14 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         <Transition>{children}</Transition>
       </Providers>
       <ToastContainer
-        position='top-right'
+        position='top-center'
         transition={Slide}
         theme='colored'
         draggable={false}
-        pauseOnFocusLoss={false}
-        pauseOnHover={false}
+        // pauseOnFocusLoss={false}
+        // pauseOnHover={false}
         autoClose={2000}
-        hideProgressBar={true}
+      // hideProgressBar={true}
       />
     </body>
   </html>
