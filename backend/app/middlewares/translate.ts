@@ -4,14 +4,13 @@ import translator from '../translate.js'
 
 declare module 'hono' {
   interface ContextVariableMap {
-    translate: (text: TranslatableText) => string
+    translate: (text: TranslatableText, ...values: (string | number)[]) => string
   }
 }
 
 export default function translate() {
   return createMiddleware(async (c, next) => {
-    const t = translator(c)
-    c.set('translate', t)
+    c.set('translate', translator(c))
     await next()
   })
 }
