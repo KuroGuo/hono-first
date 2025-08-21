@@ -1,7 +1,9 @@
+// @ts-check
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { FlatCompat } from '@eslint/eslintrc'
 
+/** @type {import('eslint').Linter.Config[]} */
 const eslintConfig = [
   {
     ignores: [

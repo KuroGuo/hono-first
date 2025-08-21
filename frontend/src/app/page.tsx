@@ -1,6 +1,7 @@
 'use client'
 
-import { FormEventHandler, useRef } from 'react'
+import type { FormEventHandler } from 'react'
+import { useRef } from 'react'
 
 export default function Home() {
   const onSubmitRef = useRef<FormEventHandler<HTMLFormElement>>(e => {
