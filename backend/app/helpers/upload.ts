@@ -1,10 +1,11 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import { v7 as uuidv7 } from 'uuid'
-import { HTTPException } from 'hono/http-exception'
 import { mimeTypeToExtension } from '../utils.js'
 import logger from '../logger.js'
 import { isDev } from '../config.js'
+import type { Text } from './translate/index.js'
+import { HTTPError, text } from './translate/index.js'
 
 const dirName = 'uploads'
 
@@ -25,18 +26,18 @@ export async function saveFile(file: File | null | undefined) {
   await ensureUploadsDir()
 
   if (!file || !file.size) {
-    throw new HTTPException(400, { message: '未收到文件' })
+    throw new HTTPError(400, { message: text('未收到文件') })
   }
 
   if (file.size > uploadConfig.maxFileSize) {
-    throw new HTTPException(413, {
-      message: `文件大小超过限制 (最大 ${uploadConfig.maxFileSize / 1024 / 1024}MB)`
+    throw new HTTPError(413, {
+      message: text('文件大小超过限制 (最大 %0MB)', uploadConfig.maxFileSize / 1024 / 1024)
     })
   }
 
   if (!uploadConfig.allowedMimeTypes.includes(file.type)) {
-    throw new HTTPException(415, {
-      message: `不支持的文件类型: ${file.type}`
+    throw new HTTPError(415, {
+      message: text(`不支持的文件类型: %0`, file.type)
     })
   }
 
@@ -56,8 +57,8 @@ export async function saveFile(file: File | null | undefined) {
     }
   } catch (err: unknown) {
     logger.error('文件保存失败', err)
-    throw new HTTPException(500, {
-      message: (err as Error)?.message || (err as string)?.toString()
+    throw new HTTPError(500, {
+      message: text(((err as Error)?.message || (err as string)?.toString()) as Text)
     })
   }
 }

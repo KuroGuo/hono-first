@@ -203,9 +203,10 @@
     "我的矿机": "My Rigs",
     "矿机转让": "Transfer",
     "退回": "Returned",
-    "领取%0收益记录": "Claim %0 Records"
+    "领取%0收益记录": "Claim %0 Records",
+    "提交": "Submit"
   },
-  "zh": {
+  "zh-CN": {
     "Exit": "退出",
     "Ended": "已结束",
     "Receive": "领取",

@@ -7,6 +7,7 @@ import { serveStatic } from '@hono/node-server/serve-static'
 import { isDev } from './config.js'
 import logger from './logger.js'
 import routes from './routes/index.js'
+import { HTTPError } from './helpers/translate/index.js'
 
 declare global { interface BigInt { toJSON?: () => string } }
 BigInt.prototype.toJSON = function () { return this.toString() }
@@ -33,6 +34,8 @@ const app = new Hono<{ Bindings: HttpBindings }>()
   .route('/api', routes)
   .use(serveStatic({ root: `${isDev ? 'dist/' : ''}public` }))
   .onError(async (err, c) => {
+    if (err instanceof HTTPError) err.message = err.text(c)
+
     const json = c.var.json as { password?: string; Password?: string }
 
     let status: ContentfulStatusCode = 500

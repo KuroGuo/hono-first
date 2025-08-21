@@ -1,10 +1,11 @@
 import { proxy } from 'valtio'
+import type { Lang } from './translate'
 
 const variables: {
-  lang: 'zh-CN' | 'en',
+  lang: Lang
   isLoggedIn?: boolean
 } = proxy({
-  lang: 'zh-CN'
+  lang: 'en'
 })
 
 export default variables

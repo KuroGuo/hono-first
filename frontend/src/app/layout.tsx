@@ -3,6 +3,7 @@ import { Slide, ToastContainer } from 'react-toastify'
 import './globals.css'
 import { Providers } from './providers'
 import { Transition } from './transition'
+import variables from '@/variables'
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
-  return <html lang='zh-CN'>
+  return <html lang={variables.lang}>
     <body>
       <Providers>
         <Transition>{children}</Transition>
