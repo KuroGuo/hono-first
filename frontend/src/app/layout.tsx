@@ -21,7 +21,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         transition={Slide}
         theme='colored'
         draggable={false}
-        // pauseOnFocusLoss={false}
+        pauseOnFocusLoss={false}
         // pauseOnHover={false}
         autoClose={2000}
       // hideProgressBar={true}

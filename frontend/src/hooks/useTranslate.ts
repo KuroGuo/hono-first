@@ -3,12 +3,13 @@ import commonTranslations from '@/translations.json'
 import variables from '@/variables'
 import { translateText, type Lang, type TranslatableText } from '@/translate'
 import type { GetTranslationKeys, Translations } from '../../../backend/app/translate'
+import { useSnapshot } from 'valtio'
 
 export default function useTranslate<
   T extends Translations
->(translations?: T, toLanguage?: Lang) {
-  const { lang } = variables
-  if (!toLanguage) toLanguage = lang
+>(translations?: T, toLang?: Lang) {
+  const { lang } = useSnapshot(variables)
+  if (!toLang) toLang = lang
   const combinedTranslations = useMemo(() => {
     const trs = translations || {} as T
     for (const l in commonTranslations) {
@@ -23,5 +24,5 @@ export default function useTranslate<
   return useCallback((
     text: GetTranslationKeys<T> | TranslatableText,
     ...values: (string | number)[]
-  ) => translateText(combinedTranslations, toLanguage, text, ...values), [combinedTranslations, toLanguage])
+  ) => translateText(combinedTranslations, toLang, text, ...values), [combinedTranslations, toLang])
 }
