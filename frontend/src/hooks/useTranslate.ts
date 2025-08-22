@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import commonTranslations from '@/translations.json'
 import variables from '@/variables'
-import type { Lang, Text } from '@/translate'
+import type { Lang, TranslatableText } from '@/translate'
 
 export default function useTranslate<
   T extends { [lang in Lang]?: { [text: string]: string } }
@@ -19,7 +19,7 @@ export default function useTranslate<
     return trs
   }, [translations])
 
-  type ExtendedText = { [lang in Lang]: keyof typeof translations[lang] }[Lang] | Text
+  type ExtendedText = { [lang in Lang]: keyof typeof translations[lang] }[Lang] | TranslatableText
 
   return useCallback((text: ExtendedText, ...values: string[]): string => {
     let translated = translations[toLanguage]?.[text as string]

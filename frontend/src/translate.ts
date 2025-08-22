@@ -3,9 +3,9 @@ import variables from './variables'
 
 export type Lang = keyof typeof commonTranslations
 
-export type Text = { [lang in Lang]: keyof typeof commonTranslations[lang] }[Lang]
+export type TranslatableText = { [lang in Lang]: keyof typeof commonTranslations[lang] }[Lang]
 
-export function translate<T extends Text>(text: T, ...values: string[]) {
+export function translate<T extends TranslatableText>(text: T, ...values: string[]) {
   return translateText(commonTranslations, variables.lang, text, ...values)
 }
 

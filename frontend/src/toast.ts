@@ -1,6 +1,6 @@
 import type { ToastContent, ToastOptions, Id as ToastId } from 'react-toastify'
 import { toast } from 'react-toastify'
-import type { Text } from '@/translate'
+import type { TranslatableText } from '@/translate'
 import { translate } from '@/translate'
 
 export let aToastId: ToastId
@@ -14,10 +14,10 @@ export function aToast(content?: ToastContent<unknown>, options?: ToastOptions<u
   if (isAToastActive() && !aToastCloseable) {
     return toast.update(aToastId, {
       ...options,
-      render: typeof content === 'string' ? translate(content as Text) : content
+      render: typeof content === 'string' ? translate(content as TranslatableText) : content
     })
   }
-  aToastId = toast.info(typeof content === 'string' ? translate(content as Text) : content, options)
+  aToastId = toast.info(typeof content === 'string' ? translate(content as TranslatableText) : content, options)
 }
 export function isAToastActive() {
   return aToastId && toast.isActive(aToastId) && document.querySelector('.Toastify')?.innerHTML
