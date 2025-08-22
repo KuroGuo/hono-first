@@ -6,7 +6,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 
 export type Lang = keyof typeof commonTranslations
 
-export type TranslatableText = { [K in Lang]: keyof typeof commonTranslations[K] }[Lang]
+export type TranslatableText = { [lang in Lang]: keyof typeof commonTranslations[lang] }[Lang]
 
 export default function translator(
   c: Context,
