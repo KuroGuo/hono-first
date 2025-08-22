@@ -8,18 +8,27 @@ export type Lang = keyof typeof commonTranslations
 
 export type TranslatableText = { [K in Lang]: keyof typeof commonTranslations[K] }[Lang]
 
-export default function translator(c: Context) {
+export default function translator(
+  c: Context,
+  translations?: { [lang in Lang]: { [text: string]: string } }
+) {
   const lang = accepts(c, {
     header: 'Accept-Language',
     supports: ['en', 'zh-CN'] satisfies Lang[],
     default: 'en' satisfies Lang,
   }) as Lang
-  return createTranslateFunction(lang)
+  return createTranslateFunction(lang, translations)
 }
 
-function createTranslateFunction(lang: Lang) {
+function createTranslateFunction(
+  lang: Lang,
+  translations?: { [lang in Lang]: { [text: string]: string } }
+) {
   return function translate<T extends TranslatableText>(text: T, ...values: (string | number)[]) {
-    return translateText(commonTranslations, lang, text, ...values)
+    return translateText({
+      ...commonTranslations,
+      ...translations
+    }, lang, text, ...values)
   }
 }
 
@@ -56,7 +65,8 @@ export class HTTPError extends HTTPException {
     text?: TextObj | TranslatableText
   }) {
     const textObj = typeof options?.text === 'string' ? text(options.text) : options?.text
-    const messageStr = textObj ? createTranslateFunction('en')(textObj.text, ...textObj.values) : options?.message
+    const t = createTranslateFunction('en')
+    const messageStr = textObj ? t(textObj.text, ...textObj.values) : t(options?.message as TranslatableText)
     super(status, { ...options, message: messageStr })
     this.name = 'HTTPError'
     if (textObj) this.textObj = textObj

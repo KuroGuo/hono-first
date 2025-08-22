@@ -53,8 +53,10 @@ const app = new Hono<{ Bindings: HttpBindings }>()
       userId: c.var.user?.account
     })
 
+    const t = c.var.translator?.()
+
     return c.json({
-      error: c.var.translate?.(err.message as TranslatableText) || err.message
+      error: t?.(err.message as TranslatableText) || err.message
     }, status)
   })
 
