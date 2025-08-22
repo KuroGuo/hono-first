@@ -7,9 +7,7 @@ import { useSnapshot } from 'valtio'
 export function Transition({ children }: { children: React.ReactNode }) {
   const { lang } = useSnapshot(variables)
 
-  useEffect(() => {
-    document.documentElement.lang = lang
-  }, [lang])
+  useEffect(() => { document.documentElement.lang = lang }, [lang])
 
   return children
 }
