@@ -7,8 +7,8 @@ import { serveStatic } from '@hono/node-server/serve-static'
 import { isDev } from './config.js'
 import logger from './logger.js'
 import routes from './routes/index.js'
-import type { TranslatableText } from './translate.js'
-import { HTTPError } from './translate.js'
+import type { TranslatableText } from './middlewares/translate.js'
+import { HTTPError } from './middlewares/translate.js'
 
 declare global { interface BigInt { toJSON?: () => string } }
 BigInt.prototype.toJSON = function () { return this.toString() }

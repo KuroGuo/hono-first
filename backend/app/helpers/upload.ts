@@ -4,8 +4,8 @@ import { v7 as uuidv7 } from 'uuid'
 import { mimeTypeToExtension } from '../utils.js'
 import logger from '../logger.js'
 import { isDev } from '../config.js'
-import type { TranslatableText } from '../translate.js'
-import { HTTPError, text } from '../translate.js'
+import type { TranslatableText } from '../middlewares/translate.js'
+import { HTTPError, text } from '../middlewares/translate.js'
 
 const dirName = 'uploads'
 

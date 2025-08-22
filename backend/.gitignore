@@ -48,3 +48,5 @@ pnpm-*.yaml
 coverage/
 
 public/uploads/
+
+shared

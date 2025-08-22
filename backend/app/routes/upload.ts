@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { saveFile } from '../helpers/upload.js'
 import { validator } from 'hono/validator'
-import { HTTPError } from '../translate.js'
+import { HTTPError } from '../middlewares/translate.js'
 
 export default new Hono()
   .post('/', validator('form', form => {

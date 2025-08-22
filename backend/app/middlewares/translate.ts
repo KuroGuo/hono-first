@@ -1,15 +1,21 @@
 import { createMiddleware } from 'hono/factory'
 import { accepts } from 'hono/accepts'
-import type { GetTranslationKeys, Lang, TranslatableText, Translations } from '../translate.js'
-import translator from '../translate.js'
+import type { Lang, TranslatableText as _TranslatableText, Translations, Translate } from '../../shared/translate/index.js'
+import _translator, { setCommonTranslations } from '../../shared/translate/index.js'
+import { HTTPException } from 'hono/http-exception'
+import type { ContentfulStatusCode } from 'hono/utils/http-status'
+import commonTranslations from '../translations.json' with { type: 'json' }
+
+setCommonTranslations(commonTranslations)
 
 declare module 'hono' {
   interface ContextVariableMap {
     lang: Lang
-    translator<T extends Translations>(translations?: T):
-      (text: GetTranslationKeys<T> | TranslatableText, ...values: (string | number)[]) => string
+    translator<T extends Translations>(translations?: T): Translate<T, typeof commonTranslations>
   }
 }
+
+export type TranslatableText = _TranslatableText<typeof commonTranslations>
 
 export default function translate() {
   return createMiddleware(async (c, next) => {
@@ -24,4 +30,34 @@ export default function translate() {
     })
     await next()
   })
+}
+
+type TextObj = { text: TranslatableText; values: (string | number)[] }
+export function text(t: TranslatableText, ...values: (string | number)[]) {
+  return { text: t, values }
+}
+export class HTTPError extends HTTPException {
+  textObj?: TextObj
+  public text(lang: Lang) {
+    if (!this.textObj) return this.message
+    const t = translator(lang)
+    return t(this.textObj.text, ...this.textObj.values)
+  }
+  constructor(status?: ContentfulStatusCode, options?: {
+    res?: Response
+    message?: string
+    cause?: unknown
+    text?: TextObj | TranslatableText
+  }) {
+    const textObj = typeof options?.text === 'string' ? text(options.text) : options?.text
+    const t = translator('en')
+    const messageStr = textObj ? t(textObj.text, ...textObj.values) : t(options?.message as TranslatableText)
+    super(status, { ...options, message: messageStr })
+    this.name = 'HTTPError'
+    if (textObj) this.textObj = textObj
+  }
+}
+
+function translator<T extends Translations>(lang: Lang, translations?: T) {
+  return _translator<typeof commonTranslations, T>(lang, translations)
 }

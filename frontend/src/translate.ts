@@ -1,24 +1,24 @@
-import type { Translations } from '../../backend/app/translate'
+import type { TranslatableText as _TranslatableText } from '../shared/translate'
+import _translator, { setCommonTranslations, translateText } from '../shared/translate'
 import commonTranslations from './translations.json'
 import variables from './variables'
 
-export type Lang = keyof typeof commonTranslations
+setCommonTranslations(commonTranslations)
 
-export type TranslatableText = { [lang in Lang]: keyof typeof commonTranslations[lang] }[Lang]
+export type CommonTranslations = typeof commonTranslations
 
-export function translate<T extends TranslatableText>(text: T, ...values: string[]) {
+export type Lang = keyof CommonTranslations
+
+export type Translations = { [lang in Lang]?: { [text: string]: string } }
+
+export type TranslatableText = _TranslatableText<typeof commonTranslations>
+
+export function translate<
+  T extends TranslatableText
+>(text: T, ...values: string[]) {
   return translateText(commonTranslations, variables.lang, text, ...values)
 }
 
-export function translateText(
-  translations: Translations,
-  lang: Lang,
-  text: string | number | symbol,
-  ...values: (string | number)[]
-) {
-  let translated = translations[lang]?.[text] || text.toString()
-  values.forEach((value, i) => {
-    translated = translated.replace(`%${i}`, value.toString())
-  })
-  return translated
+export function translator<T extends Translations>(lang: Lang, translations?: T) {
+  return _translator<typeof commonTranslations, T>(lang, translations)
 }

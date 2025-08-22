@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { HTTPError } from '../translate.js'
+import { HTTPError } from '../middlewares/translate.js'
 
 export default new Hono()
   .get('/:name', c => {

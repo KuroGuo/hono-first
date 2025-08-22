@@ -1,27 +1,25 @@
-import { useCallback, useMemo } from 'react'
-import commonTranslations from '@/translations.json'
+import type { Lang, Translations } from '@/translate'
+import { translator } from '@/translate'
 import variables from '@/variables'
-import { translateText, type Lang, type TranslatableText } from '@/translate'
-import type { GetTranslationKeys, Translations } from '../../../backend/app/translate'
 
 export default function useTranslate<
   T extends Translations
->(translations?: T, toLanguage?: Lang) {
-  const { lang } = variables
-  if (!toLanguage) toLanguage = lang
-  const combinedTranslations = useMemo(() => {
-    const trs = translations || {} as T
-    for (const l in commonTranslations) {
-      trs[l as Lang] = {
-        ...commonTranslations[l as Lang],
-        ...trs[l as Lang]
-      }
-    }
-    return trs
-  }, [translations])
+>(translations?: T, toLang: Lang = variables.lang) {
+  return translator(toLang, translations)
 
-  return useCallback((
-    text: GetTranslationKeys<T> | TranslatableText,
-    ...values: (string | number)[]
-  ) => translateText(combinedTranslations, toLanguage, text, ...values), [combinedTranslations, toLanguage])
+  // const combinedTranslations = useMemo(() => {
+  //   const trs = translations || {} as T
+  //   for (const l in commonTranslations) {
+  //     trs[l as Lang<T>] = {
+  //       ...commonTranslations[l as Lang<CommonTranslations>],
+  //       ...trs[l as Lang<T>]
+  //     }
+  //   }
+  //   return trs
+  // }, [translations])
+
+  // return useCallback((
+  //   text: TranslationText<T> | TranslatableText<CommonTranslations>,
+  //   ...values: (string | number)[]
+  // ) => translateText(combinedTranslations, toLanguage, text, ...values), [combinedTranslations, toLanguage])
 }
