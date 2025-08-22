@@ -1,3 +1,4 @@
+import type { Translations } from '../../backend/app/translate'
 import commonTranslations from './translations.json'
 import variables from './variables'
 
@@ -9,13 +10,13 @@ export function translate<T extends TranslatableText>(text: T, ...values: string
   return translateText(commonTranslations, variables.lang, text, ...values)
 }
 
-function translateText(
-  translations: { [lang: string]: { [text: string]: string } },
-  lang: string,
-  text: string,
+export function translateText(
+  translations: Translations,
+  lang: Lang,
+  text: string | number | symbol,
   ...values: (string | number)[]
 ) {
-  let translated = translations[lang || 'en'][text] || text
+  let translated = translations[lang]?.[text] || text.toString()
   values.forEach((value, i) => {
     translated = translated.replace(`%${i}`, value.toString())
   })

@@ -1,6 +1,4 @@
-import type { Context } from 'hono'
 import commonTranslations from './translations.json' with { type: 'json' }
-import { accepts } from 'hono/accepts'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 
@@ -8,37 +6,37 @@ export type Lang = keyof typeof commonTranslations
 
 export type TranslatableText = { [lang in Lang]: keyof typeof commonTranslations[lang] }[Lang]
 
-export default function translator(
-  c: Context,
-  translations?: { [lang in Lang]: { [text: string]: string } }
-) {
-  const lang = accepts(c, {
-    header: 'Accept-Language',
-    supports: ['en', 'zh-CN'] satisfies Lang[],
-    default: 'en' satisfies Lang,
-  }) as Lang
-  return createTranslateFunction(lang, translations)
-}
+export type Translations = { [lang in Lang]?: { [text: string | number | symbol]: string } }
 
-function createTranslateFunction(
+export type GetTranslationKeys<T extends Translations> = {
+  [lang in Lang]: keyof T[lang]
+}[Lang]
+
+export default function translator<T extends Translations>(
   lang: Lang,
-  translations?: { [lang in Lang]: { [text: string]: string } }
+  translations: T = {} as T
 ) {
-  return function translate<T extends TranslatableText>(text: T, ...values: (string | number)[]) {
-    return translateText({
-      ...commonTranslations,
-      ...translations
-    }, lang, text, ...values)
+  commonTranslations satisfies Translations
+  for (const l in commonTranslations) {
+    translations[l as Lang] = {
+      ...commonTranslations[l as Lang],
+      ...translations[l as Lang]
+    }
   }
+
+  return (
+    text: GetTranslationKeys<T> | TranslatableText,
+    ...values: (string | number)[]
+  ) => translateText(translations, lang, text, ...values)
 }
 
 function translateText(
-  translations: { [lang: string]: { [text: string]: string } },
-  lang: string,
-  text: string,
+  translations: Translations,
+  lang: Lang,
+  text: string | number | symbol,
   ...values: (string | number)[]
 ) {
-  let translated = translations[lang || 'en'][text] || text
+  let translated = translations[lang]?.[text] || text.toString()
   values.forEach((value, i) => {
     translated = translated.replace(`%${i}`, value.toString())
   })
@@ -53,9 +51,9 @@ export function text(t: TranslatableText, ...values: (string | number)[]) {
 
 export class HTTPError extends HTTPException {
   textObj?: TextObj
-  public text(c: Context) {
+  public text(lang: Lang) {
     if (!this.textObj) return this.message
-    const t = translator(c)
+    const t = translator(lang)
     return t(this.textObj.text, ...this.textObj.values)
   }
   constructor(status?: ContentfulStatusCode, options?: {
@@ -65,7 +63,7 @@ export class HTTPError extends HTTPException {
     text?: TextObj | TranslatableText
   }) {
     const textObj = typeof options?.text === 'string' ? text(options.text) : options?.text
-    const t = createTranslateFunction('en')
+    const t = translator('en')
     const messageStr = textObj ? t(textObj.text, ...textObj.values) : t(options?.message as TranslatableText)
     super(status, { ...options, message: messageStr })
     this.name = 'HTTPError'

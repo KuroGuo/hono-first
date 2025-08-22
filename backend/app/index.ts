@@ -35,7 +35,7 @@ const app = new Hono<{ Bindings: HttpBindings }>()
   .route('/api', routes)
   .use(serveStatic({ root: `${isDev ? 'dist/' : ''}public` }))
   .onError(async (err, c) => {
-    if (err instanceof HTTPError) err.message = err.text(c)
+    if (err instanceof HTTPError) err.message = err.text(c.var.lang)
 
     const json = c.var.json as { password?: string; Password?: string }
 
