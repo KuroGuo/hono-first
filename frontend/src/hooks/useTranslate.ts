@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react'
 import commonTranslations from '@/translations.json'
 import variables from '@/variables'
-import { translateText, type Lang, type TranslatableText } from '@/translate'
-import type { GetTranslationKeys, Translations } from '../../../backend/app/translate'
+import { translateText, type Lang, type CommonTranslationKeys } from '@/translate'
+import type { TranslationKeys, Translations } from '../../../backend/app/translate'
 import { useSnapshot } from 'valtio'
 
 export default function useTranslate<
@@ -22,7 +22,7 @@ export default function useTranslate<
   }, [translations])
 
   return useCallback((
-    text: GetTranslationKeys<T> | TranslatableText,
+    text: TranslationKeys<T> | CommonTranslationKeys,
     ...values: (string | number)[]
   ) => translateText(combinedTranslations, toLang, text, ...values), [combinedTranslations, toLang])
 }

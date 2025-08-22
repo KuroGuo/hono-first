@@ -1,12 +1,12 @@
-import type { Translations } from '../../backend/app/translate'
+import type { TranslationKeys, Translations } from '../../backend/app/translate'
 import commonTranslations from './translations.json'
 import variables from './variables'
 
 export type Lang = keyof typeof commonTranslations
 
-export type TranslatableText = { [lang in Lang]: keyof typeof commonTranslations[lang] }[Lang]
+export type CommonTranslationKeys = TranslationKeys<typeof commonTranslations>
 
-export function translate<T extends TranslatableText>(text: T, ...values: string[]) {
+export function translate<T extends CommonTranslationKeys>(text: T, ...values: string[]) {
   return translateText(commonTranslations, variables.lang, text, ...values)
 }
 

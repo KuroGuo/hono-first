@@ -1,13 +1,13 @@
 import { createMiddleware } from 'hono/factory'
 import { accepts } from 'hono/accepts'
-import type { GetTranslationKeys, Lang, TranslatableText, Translations } from '../translate.js'
+import type { TranslationKeys, Lang, CommonTranslationKeys, Translations } from '../translate.js'
 import translator from '../translate.js'
 
 declare module 'hono' {
   interface ContextVariableMap {
     lang: Lang
     translator<T extends Translations>(translations?: T):
-      (text: GetTranslationKeys<T> | TranslatableText, ...values: (string | number)[]) => string
+      (text: TranslationKeys<T> | CommonTranslationKeys, ...values: (string | number)[]) => string
   }
 }
 

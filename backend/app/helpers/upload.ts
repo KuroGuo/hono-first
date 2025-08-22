@@ -4,7 +4,7 @@ import { v7 as uuidv7 } from 'uuid'
 import { mimeTypeToExtension } from '../utils.js'
 import logger from '../logger.js'
 import { isDev } from '../config.js'
-import type { TranslatableText } from '../translate.js'
+import type { CommonTranslationKeys } from '../translate.js'
 import { HTTPError, text } from '../translate.js'
 
 const dirName = 'uploads'
@@ -58,7 +58,7 @@ export async function saveFile(file: File | null | undefined) {
   } catch (err: unknown) {
     logger.error('文件保存失败', err)
     throw new HTTPError(500, {
-      text: ((err as Error)?.message || (err as string)?.toString()) as TranslatableText
+      text: ((err as Error)?.message || (err as string)?.toString()) as CommonTranslationKeys
     })
   }
 }

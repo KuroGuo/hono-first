@@ -4,13 +4,11 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 
 export type Lang = keyof typeof commonTranslations
 
-export type TranslatableText = { [lang in Lang]: keyof typeof commonTranslations[lang] }[Lang]
-
 export type Translations = { [lang in Lang]?: { [text: string | number | symbol]: string } }
 
-export type GetTranslationKeys<T extends Translations> = {
-  [lang in Lang]: keyof T[lang]
-}[Lang]
+export type TranslationKeys<T extends Translations> = { [lang in Lang]: keyof T[lang] }[Lang]
+
+export type CommonTranslationKeys = TranslationKeys<typeof commonTranslations>
 
 export default function translator<T extends Translations>(
   lang: Lang,
@@ -25,7 +23,7 @@ export default function translator<T extends Translations>(
   }
 
   return (
-    text: GetTranslationKeys<T> | TranslatableText,
+    text: TranslationKeys<T> | CommonTranslationKeys,
     ...values: (string | number)[]
   ) => translateText(translations, lang, text, ...values)
 }
@@ -43,9 +41,9 @@ function translateText(
   return translated
 }
 
-type TextObj = { text: TranslatableText; values: (string | number)[] }
+type TextObj = { text: CommonTranslationKeys; values: (string | number)[] }
 
-export function text(t: TranslatableText, ...values: (string | number)[]) {
+export function text(t: CommonTranslationKeys, ...values: (string | number)[]) {
   return { text: t, values }
 }
 
@@ -60,11 +58,11 @@ export class HTTPError extends HTTPException {
     res?: Response
     message?: string
     cause?: unknown
-    text?: TextObj | TranslatableText
+    text?: TextObj | CommonTranslationKeys
   }) {
     const textObj = typeof options?.text === 'string' ? text(options.text) : options?.text
     const t = translator('en')
-    const messageStr = textObj ? t(textObj.text, ...textObj.values) : t(options?.message as TranslatableText)
+    const messageStr = textObj ? t(textObj.text, ...textObj.values) : t(options?.message as CommonTranslationKeys)
     super(status, { ...options, message: messageStr })
     this.name = 'HTTPError'
     if (textObj) this.textObj = textObj
